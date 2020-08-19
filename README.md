@@ -1,6 +1,7 @@
 rollup-plugin-write-output
 ==============================
 
+![.github/workflows/build.yml](https://github.com/eight04/rollup-plugin-write-output/workflows/.github/workflows/build.yml/badge.svg)
 [![codecov](https://codecov.io/gh/eight04/rollup-plugin-write-output/branch/master/graph/badge.svg)](https://codecov.io/gh/eight04/rollup-plugin-write-output)
 [![install size](https://packagephobia.now.sh/badge?p=rollup-plugin-write-output)](https://packagephobia.now.sh/result?p=rollup-plugin-write-output)
 
