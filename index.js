@@ -8,9 +8,21 @@ function applyMatchRef(s, arr) {
 }
 
 function createImportResolver(bundle) {
-  return key => search(key, new Set);
+  const cache = new Map;
+  return key => {
+    if (!cache.has(key)) {
+      cache.set(key, [...search(key, new Set)]);
+    }
+    return cache.get(key);
+  };
   
   function* search(key, colored) {
+    if (cache.has(key)) {
+      const subKeys = cache.get(key);
+      yield* subKeys.filter(i => !colored.has(i));
+      subKeys.forEach(i => colored.add(i));
+      return;
+    }
     if (colored.has(key)) {
       return;
     }

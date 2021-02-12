@@ -224,4 +224,65 @@ describe("main", () => {
       );
     })
   );
+  
+  it("import order duplicate entries", () =>
+    withDir(`
+      - dist:
+        - js:
+        - manifest.json: |
+            {
+              "files": []
+            }
+      - src:
+        - index.js: |
+            import foo from "./foo.js";
+            console.log(foo);
+        - index2.js: |
+            import foo from "./foo.js";
+            console.log(foo);
+        - index3.js: |
+            import "./index.js";
+            import "./index2.js";
+        - foo.js: |
+            export default 1;
+    `, async resolve => {
+      await bundle({
+        input: [
+          resolve("src/index.js"),
+          resolve("src/index2.js"),
+          resolve("src/index3.js")
+        ],
+        dir: resolve("dist/js"),
+        targets: [
+          {
+            test: /index3\.js$/,
+            target: resolve("dist/manifest.json"),
+            handle: (content, {scripts}) => {
+              content.files = scripts;
+              return content;
+            }
+          },
+          {
+            test: /.*/,
+            target: resolve("dist/manifest.json"),
+            handle: content => content
+          }
+        ]
+      });
+      
+      looksLike(
+        await fs.readFile(resolve("dist/manifest.json"), "utf8"),
+        String.raw`
+        {
+          "files": [
+            "js/foo-{{\w+}}.js",
+            "js/index.js",
+            "js/index2.js",
+            "js/index3.js"
+          ]
+        }
+        `
+      );
+    })
+  );
 });
