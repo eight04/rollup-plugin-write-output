@@ -85,8 +85,14 @@ This function accepts a list of targets.
 * `context.scripts` - list of path to output chunks, including the output file and its dependencies. The list is ordered so dependencies load first. Paths are relative to `target` and always use forward slash `/`.
 * `context.htmlScripts` - HTML script tags that can be injected to HTML directly. It equals to ``scripts.map(s => `<script src="${s}"></script>`).join("")``.
 
+Scripts are ordered and dependencies will be loaded first.
+
 Changelog
 ---------
+
+* 0.1.1 (Feb 12, 2021)
+
+  - Add: an import resolver to guaratee script execution order.
 
 * 0.1.0 (Aug 19, 2020)
 
