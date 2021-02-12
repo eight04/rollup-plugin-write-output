@@ -8,19 +8,9 @@ function applyMatchRef(s, arr) {
 }
 
 function createImportResolver(bundle) {
-  const cache = new Map;
-  return key => {
-    if (!cache.has(key)) {
-      cache.set(key, [...search(key, new Set)]);
-    }
-    return cache.get(key);
-  };
+  return key => search(key, new Set);
   
   function* search(key, colored) {
-    if (cache.has(key)) {
-      yield* cache.get(key);
-      return;
-    }
     if (colored.has(key)) {
       return;
     }
