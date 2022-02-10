@@ -90,6 +90,10 @@ Scripts are ordered and dependencies will be loaded first.
 Changelog
 ---------
 
+* 0.1.2 (Feb 10, 2022)
+
+  - Fix: handle generated assets.
+
 * 0.1.1 (Feb 12, 2021)
 
   - Add: an import resolver to guaratee script execution order.
