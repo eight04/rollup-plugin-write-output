@@ -15,7 +15,7 @@
     "coverage"
   ],
   "scripts": {
-    "test": "eslint **/*.js --cache && c8 --reporter lcov mocha",
+    "test": "eslint . --cache && c8 --reporter lcov mocha",
     "preversion": "npm test",
     "postversion": "git push --follow-tags && npm publish"
   },
