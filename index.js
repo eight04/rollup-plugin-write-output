@@ -27,7 +27,7 @@ function createImportResolver(bundle) {
       return;
     }
     colored.add(key);
-    for (const subKey of bundle[key].imports) {
+    for (const subKey of bundle[key].imports || []) {
       yield* search(subKey, colored);
     }
     yield key;
@@ -59,10 +59,17 @@ function createPlugin(targets) {
         .map(p => path.resolve(prefix, p))
         .map(p => path.relative(path.dirname(absTarget), p))
         .map(p => p.replace(/\\/g, "/"));
+
+      const scriptToHTML = url => {
+        if (url.endsWith(".css")) {
+          return `<link rel="stylesheet" href="${url}">`;
+        }
+        return `<script src="${url}"></script>`;
+      };
         
       const context = {
         scripts,
-        htmlScripts: scripts.map(p => `<script src="${p}"></script>`).join("")
+        htmlScripts: scripts.map(scriptToHTML).join("")
       };
         
       let content = await fs.readFile(absTarget, "utf8");

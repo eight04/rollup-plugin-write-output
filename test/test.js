@@ -5,15 +5,16 @@ const fs = require("fs").promises;
 const rollup = require("rollup");
 const {withDir} = require("tempdir-yaml");
 const {looksLike} = require("string-looks-like");
-// const {default: endent} = require("endent");
+const {copy} = require("@web/rollup-plugin-copy");
 
 const createPlugin = require("..");
 
-async function bundle({input, dir, targets}) {
+async function bundle({input, dir, targets, plugins = []}) {
   const bundle = await rollup.rollup({
     input,
     plugins: [
-      createPlugin(targets)
+      createPlugin(targets),
+      ...plugins
     ]
   });
   await bundle.write({
@@ -279,6 +280,56 @@ describe("main", () => {
             "js/index.js",
             "js/index2.js",
             "js/index3.js"
+          ]
+        }
+        `
+      );
+    })
+  );
+
+  it("handle assets", () =>
+    withDir(`
+      - dist:
+        - manifest.json: |
+            {
+              "files": []
+            }
+      - src:
+        - index.js: |
+            console.log(foo);
+        - index.css: |
+            body {color: red}
+    `, async resolve => {
+      await bundle({
+        input: [
+          resolve("src/index.js"),
+        ],
+        dir: resolve("dist"),
+        targets: [
+          {
+            test: /.*/,
+            target: resolve("dist/manifest.json"),
+            handle: (content, {scripts}) => {
+              content.files.push(...scripts);
+              return content;
+            }
+          }
+        ],
+        plugins: [
+          copy({
+            rootDir: resolve("src"),
+            patterns: "*.css"
+          })
+        ]
+      });
+      
+      looksLike(
+        await fs.readFile(resolve("dist/manifest.json"), "utf8"),
+        String.raw`
+        {
+          "files": [
+            "index.js",
+            "index.css"
           ]
         }
         `
