@@ -90,6 +90,10 @@ Scripts are ordered and dependencies will be loaded first.
 Changelog
 ---------
 
+* 0.2.0 (Nov 26, 2022)
+
+  - **Breaking: bump to rollup@3**.*
+
 * 0.1.2 (Feb 10, 2022)
 
   - Fix: handle generated assets.

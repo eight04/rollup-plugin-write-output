@@ -18,10 +18,8 @@ async function bundle({input, dir, targets, plugins = []}) {
     ]
   });
   await bundle.write({
-    output: {
-      dir,
-      format: "es"
-    }
+    dir,
+    format: "es"
   });
 }
 
