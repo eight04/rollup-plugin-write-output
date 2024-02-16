@@ -90,6 +90,10 @@ Scripts are ordered and dependencies will be loaded first.
 Changelog
 ---------
 
+* 0.2.1 (Feb 16, 2024)
+
+  - Bump deps, support rollup 4.
+
 * 0.2.0 (Nov 26, 2022)
 
   - **Breaking: bump to rollup@3**.*
